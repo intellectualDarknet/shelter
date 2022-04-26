@@ -387,6 +387,7 @@ backDrop.addEventListener('click',function(event) {
 	
 })
 
+
 function pagination(pet) {
 	return `
 	<div class="friends__app-img">
