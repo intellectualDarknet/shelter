@@ -95,7 +95,7 @@ const pets = [
 
 ];
 
-numb = 10;
+let numb = 10;
 
 function getCurrentScreen() {
 	const width = window.innerWidth || document.innerWidth;
@@ -303,8 +303,13 @@ let resArr = [];
 PrevArray = []
 array = []
 
-function createCards() {
-	let array = []
+function createCards(l = 0) {
+	 array = []
+	if ( l != 0) {
+		console.log(1)
+		array =  PrevArray.slice(-6,-3);
+		console.log("!!!!!!",array);
+	} 
 	switch(currentOffset) {
 
 		case 1:
@@ -312,13 +317,13 @@ function createCards() {
 			for(let q = 0; array.length < 1; ) {
 				let w =  Math.floor(Math.abs(Math.random() - 0.00001) / 0.125)  + 1;
 
-				if (!PrevArray.includes(w) && !array.includes(w))  {
+				if (!PrevArray.slice(-3).includes(w) && !array.includes(w))  {
 					console.log(PrevArray.includes(w))
 					q++
 					array.push(w)
 				}
 			}
-			PrevArray = array.slice(0);
+			
 		 
 			return `
 				<div class="friends__columns ">
@@ -358,14 +363,14 @@ function createCards() {
 			for(let q = 0; array.length < 2;) {
 				let w =  Math.floor(Math.abs(Math.random() - 0.00001) / 0.125)  + 1;
 
-				if (!PrevArray.includes(w) && !array.includes(w))  {
+				if (!PrevArray.slice(-3).includes(w) && !array.includes(w))  {
 					console.log(PrevArray.includes(w))
 					array.push(w)
 					q++
 				}
 				
 			}
-			PrevArray = array.slice(0);
+			
 
 
 			return 	`
@@ -407,13 +412,13 @@ function createCards() {
 			for(let q = 0; array.length < 3; ) {
 				let w =  Math.floor(Math.abs(Math.random() - 0.00001) / 0.125)  + 1;
 
-				if (!PrevArray.includes(w) && !array.includes(w))  {
-					console.log(PrevArray.includes(w))
+				if (!PrevArray.slice(-3).includes(w) && !array.includes(w))  {
+					console.log(PrevArray)
 					array.push(w)
 					q++
 				}
 			}
-			PrevArray = array.slice(0);
+			
 		
 		return `
 		<div class="friends__columns">
@@ -475,11 +480,17 @@ caruselPrev = document.querySelector('.friends__btn-prev');
 caruselParent = document.querySelector('.friends__parent-columns')
 
 caruselParent.insertAdjacentHTML('beforeend', createCards());
+PrevArray = array.slice(0);
+console.log(PrevArray)
 
 
 
 wrapper = document.querySelector('.friends__wrapper')
 console.log(wrapper)
+
+
+o = document.getElementsByClassName("friends__btn-prev");
+skf = document.getElementsByClassName("friends__btn-next");
 
 wrapper.addEventListener('click',(event) => {
 	console.log(event.target.closest('.friends__column'))
@@ -499,15 +510,36 @@ wrapper.addEventListener('click',(event) => {
 		
 		case event.target.closest('.friends__btn-next'):
 		if (numb != 2) {
+			console.log(numb)
+			console.log('next next')
 			caruselParent.insertAdjacentHTML('beforeend', createCards());
-			numb == 1;
-		} 
-
+			
+		}  else if(numb == 2){
+			console.log('next left')
+			console.log(numb)
+			caruselParent.insertAdjacentHTML('beforeend', createCards(numb));
+		}
+		numb = 1;
+		PrevArray = [...PrevArray, ...array];
+		console.log(PrevArray)
 		
 		
 
 	let f = document.getElementsByClassName('friends__columns');
-	caruselNext.setAttribute('disabled', 'disabled');
+
+
+
+
+	for(let i = 0 ; i < skf.length; i++) {
+		skf[i].setAttribute('disabled', 'disabled');
+	}
+	for(let i = 0 ; i < skf.length; i++) {
+		o[i].setAttribute('disabled', 'disabled');
+	}
+
+
+
+
 
 	setTimeout(() => {
 
@@ -534,58 +566,104 @@ wrapper.addEventListener('click',(event) => {
 			f[i].classList.remove('friends__translateRight');
 		}
 		
-		caruselNext.removeAttribute('disabled');
+	
+		
 	}, 500);
+
+
+	setTimeout(() => {
+		for(let i = 0 ; i < skf.length; i++) {
+			skf[i].removeAttribute('disabled');
+		}
+		for(let i = 0 ; i < o.length; i++) {
+			o[i].removeAttribute('disabled');
+		}	
+	},600)
 
 		break;
 
+
+
+
+
+
 		case event.target.closest('.friends__btn-prev'):
 
-		if(numb != 1) {
-			caruselParent.insertAdjacentHTML('afterbegin', createCards());
 			
-			numb == 2;
-		}
+			for(let i = 0 ; i < skf.length; i++) {
+			skf[i].setAttribute('disabled', 'disabled');
+			}
+			for(let i = 0 ; i < skf.length; i++) {
+				o[i].setAttribute('disabled', 'disabled');
+			}
 
-		let l  = document.querySelector('.friends__columns')
-		let p = document.getElementsByClassName('friends__columns');
-		caruselPrev.setAttribute('disabled', 'disabled');
+
+
+
+			let l  = document.querySelector('.friends__columns')
+			caruselPrev.setAttribute('disabled', 'disabled');
+			let p = document.getElementsByClassName('friends__columns');
+			
 	
+		
 		setTimeout(() => {
+
+			if(numb != 1) {
+				caruselParent.insertAdjacentHTML('afterbegin', createCards());
+				PrevArray = [...PrevArray, ...array];
+			}
+			if(numb == 1) {
+				caruselParent.insertAdjacentHTML('afterbegin', createCards(numb));
+				PrevArray = [...PrevArray, ...array];
+				console.log(PrevArray)
+				
+			}
 			
 			for(let i = 0 ; i < p.length; i++) {
 				p[i].classList.add('friends__translateRight');
-			}
-	
-		},0);
-	
-	
-		setTimeout(() => {
-			for(let i = 0 ; i < p.length; i++) {
-				p[i].classList.add('friends__transition');
-			}
-		},32)
-		
-	
-		setTimeout(() => {
+			}	
 			
-			for(let i = 0 ; i < p.length; i++) {
-				p[i].classList.remove('friends__translateRight');
-			}
-	
-		},48)
-	
+		
+			setTimeout(() => {
+				for(let i = 0 ; i < p.length; i++) {
+					p[i].classList.add('friends__transition');
+				}
+				setTimeout(() => {
+			
+					for(let i = 0 ; i < p.length; i++) {
+						p[i].classList.remove('friends__translateRight');
+					}
+					
+		
+				},16)
+		
+			},24)
+			
+		},0);
+		
+		
 		setTimeout(()=> {
 		
 			for(let i = 0 ; i < p.length; i++) {
 				p[i].classList.remove('friends__transition');
 			}
-	
-			l.remove();
-			caruselPrev.removeAttribute('disabled');
-		}, 508)
 
-	break;
+			l.remove();
+			numb = 2;
+
+		}, 500)
+
+		setTimeout(() => {
+			for(let i = 0 ; i < skf.length; i++) {
+			skf[i].removeAttribute('disabled');
+			}
+			for(let i = 0 ; i < o.length; i++) {
+				o[i].removeAttribute('disabled');
+			}	
+		},600)
+	
+		
+		break;
 
 
 		// case event.target.closest('.friends__column'): 
@@ -692,3 +770,45 @@ function paginationMain(pet) {
 	</div>
 	`;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
